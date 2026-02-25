@@ -23,7 +23,7 @@ AI-асистент у Telegram, який підключається до осо
    - Використовує кастомний `HTTP Request Tool` для безпечного звернення до ендпоінтів `/personal/client-info` та `/personal/statement`.
    - Обробляє JSON-відповідь банку (конвертує копійки в гривні, групує категорії) та генерує читабельний звіт у Markdown.
 
-*![n8n workflow](assets/workflow-screenshot.png)*
+*![n8n workflow](assets/workflow.png)*
 
 ## Перевірити бота можна за посиланням (@mono_ai_fin_bot)
 
