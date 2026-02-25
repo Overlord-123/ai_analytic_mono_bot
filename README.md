@@ -36,9 +36,9 @@ AI-асистент у Telegram, який підключається до осо
 5. Запустіть воркфлоу та перейдіть у вашого бота!
 
 ## 📸 Демонстрація роботи
-*[Bot Demo](assets/bot-demo.png)*
-*[Bot Demo](assets/bot-demo1.png)*
-*[Bot Demo](assets/bot-demo2.png)*
+*![Bot Demo](assets/bot-demo.png)*
+*![Bot Demo](assets/bot-demo1.png)*
+*![Bot Demo](assets/bot-demo2.png)*
 
 ## 🛠 Технологічний стек
 * **Оркестрація:** n8n
