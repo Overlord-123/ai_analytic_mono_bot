@@ -1,0 +1,1284 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query",
+          "inline_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "be305b80-bf2e-4daa-a80e-616abf6168d9",
+      "name": "Telegram Trigger",
+      "webhookId": "aec25394-3cab-460e-add0-81cfda2afb4c",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Вітаю! 👋 Я — AI-асистент для аналітики ваших фінансів у Monobank. 📊\n\nЩоб я міг аналізувати ваші витрати та відповідати на запитання, мені знадобиться ваш особистий API-токен Monobank (він надає доступ виключно до читання виписок, через нього неможливо здійснювати перекази чи керувати рахунком).\n\n⚠️ Важливе попередження (Disclaimer):\nЦей бот є некомерційним демонстраційним проєктом (Portfolio Project). Усі запити обробляються через сторонні сервіси штучного інтелекту та автоматизації.\nАвтор бота не несе жодної відповідальності за збереження вашого API-токена, фінансових даних, можливі витоки інформації або будь-які інші наслідки використання бота. Ви надаєте свої дані та використовуєте цей сервіс виключно на свій страх і ризик.\n\nНатискаючи кнопку нижче, ви підтверджуєте, що розумієте ризики та погоджуєтесь з цими умовами.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Я ознайомився",
+                    "additionalFields": {
+                      "callback_data": "True"
+                    }
+                  },
+                  {
+                    "text": "❌ Відмовляюсь",
+                    "additionalFields": {
+                      "callback_data": "false"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        -192
+      ],
+      "id": "885d4d42-f1ca-4a49-9199-eb85f3782b4f",
+      "name": "Send a text message",
+      "webhookId": "ab0f13af-d07f-480e-85f6-c90fe5396dd3",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "eacca402-3d39-480c-9b63-0778c64f9260",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "new",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "08507f4f-bc9e-439e-bfa8-7b35aaf4f56a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "new"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "88ff83d4-a41e-499d-87b8-8364d5570500",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "agreed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agreed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ee079162-b361-4755-ac4b-f9fc23e07224",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "active",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "active"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        -32
+      ],
+      "id": "cfea6e6d-3b23-4c84-a297-d01b625b72c9",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dc8c6eae-ec04-4b45-8dff-f9c06735cb60",
+              "leftValue": "={{$json.tg_ch_id}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "27756204-ce2b-4b07-a668-6a96885617d5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tg_ch_id": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+            "status": "new"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tg_ch_id",
+              "displayName": "tg_ch_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "mono_api",
+              "displayName": "mono_api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        96
+      ],
+      "id": "bd6c3547-2637-4263-8126-0cdbb0b132ac",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2a388895-b829-4b01-929e-27d95ffcd6b5",
+              "leftValue": "={{ $('Telegram Trigger').item.json.callback_query?.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        -256
+      ],
+      "id": "5e5490c0-a019-4907-a600-a1b791122aad",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Telegram Trigger').item.json.callback_query.data }}",
+                    "rightValue": "True",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "881e9ff1-f951-4b2c-9991-5c440d80186a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "True"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9ad8c667-e566-46d8-8204-bf2f4133100a",
+                    "leftValue": "={{ $('Telegram Trigger').item.json.callback_query.data }}",
+                    "rightValue": "false",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        -400
+      ],
+      "id": "4e75d57b-c37b-478a-ab42-da95ca3b2201",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "agreed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tg_ch_id",
+              "displayName": "tg_ch_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "mono_api",
+              "displayName": "mono_api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        -496
+      ],
+      "id": "5f804ba4-2518-4324-8f7a-3e9f9c42777e",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Без вашої згоди я не зможу аналізувати фінанси. Якщо передумаєте, просто напишіть /start",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1504,
+        -352
+      ],
+      "id": "d26f756a-4e82-4cc1-bbb6-f1506c84fb1f",
+      "name": "Send a text message2",
+      "webhookId": "73a4fad2-4b68-4b04-acae-2502e943e2c2",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tg_ch_id": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+            "mono_api": "={{ $json.mono_api }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tg_ch_id",
+              "displayName": "tg_ch_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "mono_api",
+              "displayName": "mono_api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        -16
+      ],
+      "id": "d3e2fd91-1e15-46e9-aaec-4d6d65557af8",
+      "name": "Update row(s)1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dfa1f9c2-9aa6-41e8-bf71-8f839f57e8c3",
+              "name": "mono_api",
+              "value": "={{ $('Telegram Trigger').item.json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1088,
+        -16
+      ],
+      "id": "aaaa6975-dbd0-4dc5-a4dd-1665f3705c05",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Дякую! \nПеревіряю API",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        -16
+      ],
+      "id": "6fbb349a-ceb3-4857-8bff-ee2064a2c7b3",
+      "name": "Send a text message3",
+      "webhookId": "125f7b93-c7d4-4ef9-ae2d-4a4f31e7a749",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.monobank.ua/personal/client-info",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Token",
+              "value": "={{ $('Update row(s)1').item.json.mono_api }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1728,
+        -16
+      ],
+      "id": "dc6f89cb-6a5b-4eb5-8b44-0af2a2d27bf5",
+      "name": "HTTP Request",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Супер {{ $json.name }}!\nAPI працює",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2064,
+        -144
+      ],
+      "id": "039bb525-75a1-4149-a471-f55856b0c0ef",
+      "name": "Send a text message4",
+      "webhookId": "255d28c5-c97a-440a-8e70-b3def2e34a3f",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=От трясца!\nСхоже ви неправильно ввели API\nСпробуй ще раз",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2064,
+        48
+      ],
+      "id": "6e25019c-2771-48c0-afbb-abd14ac92cbc",
+      "name": "Send a text message5",
+      "webhookId": "0e278685-ac97-4028-9b95-0537340d0ca3",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=Ти — професійний та дружній ШІ-аналітик особистих фінансів. Твоя мета — допомагати користувачу розуміти свої фінансові звички, аналізуючи дані з його рахунків у Monobank.\n\nПОТОЧНИЙ ЧАС ТА ДАТА (Київ): {{ $now.setZone('Europe/Kyiv').toFormat('yyyy-MM-dd HH:mm:ss') }}\nВикористовуй цей час як точку відліку для всіх розрахунків (сьогодні, вчора, минулого тижня тощо).\n\nУ тебе є інструмент для виконання HTTP-запитів до API Monobank. Авторизаційний заголовок (X-Token) вже додається автоматично під капотом. Тобі потрібно ЛИШЕ генерувати правильний URL.\n\n**ПРАВИЛА РОБОТИ З API MONOBANK (СУВОРО ДОТРИМУЙСЯ):**\n1. **Базовий URL:** `https://api.monobank.ua`\n2. **Баланс та інфо:** `GET /personal/client-info` (використовуй, щоб дізнатися поточний баланс або знайти ID рахунків).\n3. **Виписка (транзакції):** `GET /personal/statement/{account}/{from}/{to}`\n   - `{account}`: використовуй `0` для головного гривневого рахунку.\n   - `{from}` та `{to}`: ОБОВ'ЯЗКОВО у форматі UNIX timestamp (в секундах, рівно 10 цифр). Розраховуй їх самостійно на основі поточного часу, який вказано вище.\n   - Максимальний період між from та to — 31 день (2678400 секунд)!\n4. **Конвертація валют (КРИТИЧНО):** Monobank повертає всі суми в копійках! Значення `amount: -15050` означає витрату `150.50` грн. ЗАВЖДИ діли поля `amount`, `balance`, `cashbackAmount` на 100. Від'ємний `amount` — це витрата, додатний — дохід.\n\n**ТВІЙ АЛГОРИТМ ДІЙ:**\n1. Проаналізуй запит (за який період потрібні дані).\n2. Обчисли дати `{from}` та `{to}` в UNIX timestamp, відштовхуючись від поточного часу.\n3. Зроби запит через інструмент. \n4. Оброби отриманий JSON. Згрупуй транзакції за категоріями (поле `description`).\n\n**ФОРМАТ ВІДПОВІДІ (Markdown):**\n- **Підсумок:** Загальна сума витрат і надходжень за вказаний період.\n- **Топ категорій/витрат:** Маркований список основних витрат (у грн).\n- **Аналітика/Рекомендація:** Виділи найбільшу покупку або дай коротку пораду щодо бюджету.\n\nСпілкуйся українською. Ніколи не показуй сирий JSON або UNIX-дати користувачу. Якщо отримуєш помилку від API \"Too many requests\" (код 429), скажи користувачу: \"Монобанк просить трохи зачекати через ліміт запитів. Спробуйте через хвилину\"."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1440,
+        208
+      ],
+      "id": "c8ac0a00-29a2-4140-8685-85671b91432c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "active",
+            "tg_ch_id": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tg_ch_id",
+              "displayName": "tg_ch_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "mono_api",
+              "displayName": "mono_api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2272,
+        -144
+      ],
+      "id": "85772746-a50b-444f-99f9-40e35f0caee5",
+      "name": "Update row(s)2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1376,
+        416
+      ],
+      "id": "ce3744a8-e3a2-4476-960a-482efc7e1508",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "DbHGH4RVo4IVdicb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.tg_ch_id }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        416
+      ],
+      "id": "d5332fb8-ca45-4f9a-8423-24eac065b087",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Token",
+              "value": "={{ $json.mono_api }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        1664,
+        416
+      ],
+      "id": "fdd51755-b9ca-4f4c-b2c6-2ac57a750890",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1792,
+        208
+      ],
+      "id": "0438f5c5-cf4e-4a7e-86c8-2f8148ee933c",
+      "name": "Send a text message6",
+      "webhookId": "79a153b0-8433-4669-bbee-ac19e307f314",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Enst1flqqmgbrVDT",
+          "mode": "list",
+          "cachedResultName": "test_user_info",
+          "cachedResultUrl": "/projects/hgDt8DDda5ACaBDd/datatables/Enst1flqqmgbrVDT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "tg_ch_id",
+              "keyValue": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        208
+      ],
+      "id": "67923cc4-f63c-42f5-9b97-2a3ea3d6c3e9",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Дякую за згоду! \nТепер перейдіть на api.monobank.ua, скопіюйте ваш персональний токен і надішліть його мені сюди",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1712,
+        -496
+      ],
+      "id": "029533b2-7e57-4399-acac-81523179dd1e",
+      "name": "Send a text message1",
+      "webhookId": "9ee458da-927f-4e2f-b742-86f9f589a443",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message?.chat?.id || $('Telegram Trigger').item.json.callback_query?.message?.chat?.id }}",
+        "text": "=Підключення завершено тепер можеш писати запит\n\nЩо тебе найбільше цікавить ?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2480,
+        -144
+      ],
+      "id": "67f85ad6-68cb-4e8f-abd6-8bc75711df2a",
+      "name": "Send a text message7",
+      "webhookId": "6c6bee64-d2b4-4277-b10d-0d631c581175",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVmvlyFDzVESzLfn",
+          "name": "testtt_booot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b5e0b9a-e2ff-4dfe-a9e3-024f1ed212ad",
+              "name": "tg_ch_id",
+              "value": "={{ $json.tg_ch_id }}",
+              "type": "number"
+            },
+            {
+              "id": "2e65cd34-da3a-4fa0-8551-9bb653277397",
+              "name": "mono_api",
+              "value": "={{ $json.mono_api }}",
+              "type": "string"
+            },
+            {
+              "id": "02dc3859-1870-42c6-ae3a-c36e79115bad",
+              "name": "message.text",
+              "value": "={{ $('Telegram Trigger').item.json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        208
+      ],
+      "id": "9686c19f-4766-4bd0-8fdb-42732ca4b228",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 879016613,
+          "message": {
+            "message_id": 31,
+            "from": {
+              "id": 611820974,
+              "is_bot": false,
+              "first_name": "Михайло",
+              "username": "mi_s_h_a",
+              "language_code": "en",
+              "is_premium": true
+            },
+            "chat": {
+              "id": 611820974,
+              "first_name": "Михайло",
+              "username": "mi_s_h_a",
+              "type": "private"
+            },
+            "date": 1772035566,
+            "text": "Який в мене зараз баланс по всім карткам ?"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message4": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)2": {
+      "main": [
+        [
+          {
+            "node": "Send a text message7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a5c480c3-c10c-46c1-8e91-969656a6f8b9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "61b4c982c05bfec8ddf0807d6788b108926ca0733874137e9bef99be622ea067"
+  },
+  "id": "AGap6kkB5zUJxx1A",
+  "tags": []
+}
