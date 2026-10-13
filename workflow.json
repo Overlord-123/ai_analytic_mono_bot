@@ -22,7 +22,7 @@
       "credentials": {
         "telegramApi": {
           "id": "RVmvlyFDzVESzLfn",
-          "name": "testtt_booot"
+          "name": "-"
         }
       }
     },
@@ -69,7 +69,7 @@
       "credentials": {
         "telegramApi": {
           "id": "RVmvlyFDzVESzLfn",
-          "name": "testtt_booot"
+          "name": "-"
         }
       }
     },
@@ -972,21 +972,21 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 879016613,
+          "update_id": -,
           "message": {
-            "message_id": 31,
+            "message_id": -,
             "from": {
-              "id": 611820974,
+              "id": -,
               "is_bot": false,
-              "first_name": "Михайло",
-              "username": "mi_s_h_a",
+              "first_name": "-",
+              "username": "-",
               "language_code": "en",
               "is_premium": true
             },
             "chat": {
-              "id": 611820974,
-              "first_name": "Михайло",
-              "username": "mi_s_h_a",
+              "id": -,
+              "first_name": "-",
+              "username": "-",
               "type": "private"
             },
             "date": 1772035566,
